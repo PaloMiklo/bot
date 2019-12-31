@@ -2,7 +2,7 @@ const puppeteer = require('puppeteer');
 
 let scrape = async () => {
   try {
-    const browser = await puppeteer.launch({ headless: false });
+    const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
 
     await page.goto(
@@ -36,10 +36,4 @@ let scrape = async () => {
   }
 };
 
-scrape()
-  .then(value => {
-    console.log(value);
-  })
-  .catch(error => {
-    console.log(error);
-  });
+module.exports = scrape();

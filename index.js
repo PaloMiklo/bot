@@ -1,13 +1,20 @@
-const puppeteer = require('puppeteer');
+const express = require('express'),
+  app = express(),
+  port = process.env.PORT || 8080,
+  bodyParser = require('body-parser'),
+  prefix = '/api/';
 
-async function getPic() {
-  const browser = await puppeteer.launch({ headless: false });
-//   const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-  await page.goto('https://m.heureka.sk/inteligentne-hodinky/samsung-galaxy-watch-46mm-sm-r800/?do=shopFilterForm-submit&order=2');
-  await page.setViewport({width: 1500, height: 1000})
-  await page.screenshot({ path: 'output/google.png' });
-  await browser.close();
-}
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-getPic();
+app.get(`${prefix}bot`, function(req, res) {
+  const bot = require('./bot.js');
+  bot.then(data => res.send(data)).catch(err => res.send('error'));
+});
+
+// const routes = require('./routes.js');
+// routes(app);
+
+app.listen(port);
+
+console.log('RESTful API server started on: ' + port);
